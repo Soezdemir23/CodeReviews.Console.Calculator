@@ -9,10 +9,12 @@ namespace CalculatorProgram
     {
         static void Main(string[] args)
         {
+
             bool endApp = false;
             // Display title as the C# console calculator app.
             Console.WriteLine("Console Calculator in C#\r");
             Console.WriteLine("------------------------\n");
+            Console.WriteLine(Directory.GetCurrentDirectory());
 
             Calculator calculator = new Calculator();
             while (!endApp)
