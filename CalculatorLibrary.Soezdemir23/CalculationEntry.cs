@@ -1,6 +1,6 @@
 namespace CalculatorLibrary;
 
-public class CalculatorHistory
+public class CalculatorEntry
 {
     private string operation;
     private double firstNum;
@@ -22,6 +22,4 @@ public class CalculatorHistory
 
     public DateTime getDate() => date;
     public void setDate(DateTime date) => this.date = date;
-
-
 }
