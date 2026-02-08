@@ -1,12 +1,22 @@
 namespace CalculatorLibrary;
 
-public class CalculatorEntry
+public class CalculationEntry
 {
+
     private string operation;
     private double firstNum;
     private double secondNum;
     private double result;
     private DateTime date;
+
+    public CalculationEntry(
+        string operation, double firstNum,
+        double secondNum, double result, DateTime date)
+    {
+        this.operation = operation;
+
+    }
+
 
     public string getOperation() => operation;
     public void setOperation(string operation) => this.operation = operation;

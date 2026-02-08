@@ -1,10 +1,12 @@
 ﻿// CalculatorLibrary.cs
 using Newtonsoft.Json;
+
 namespace CalculatorLibrary;
 
 public class Calculator
 {
     JsonWriter writer;
+
     public Calculator()
     {
         StreamWriter logFile = File.CreateText("calculator.json");
@@ -55,6 +57,7 @@ public class Calculator
         writer.WritePropertyName("Result");
         writer.WriteValue(result);
         writer.WriteEndObject();
+
 
         return result;
     }
