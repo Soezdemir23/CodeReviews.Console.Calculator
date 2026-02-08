@@ -6,21 +6,14 @@ public class UsageCounter
     // A Trace for logging would be interesting, 
     // wherein the number of sessions do not change.
 
+
     private int sessions;
+    private string content = string.Empty;
+    private readonly string path = Directory.GetCurrentDirectory() + "/usagecounter.log";
 
     public UsageCounter()
     {
-        if (!File.Exists(Directory.GetCurrentDirectory()))
-        {
-            File.CreateText("UsageCounter.log");
-        }
-        // then, access the logfile, simple. Should also only be a line
-
-        // try to parse it into a number, if it doesn't 
-        // work simply call an exception with the attempt not working.
-
-        // assign it to the variable sessions.
-
+        LoadSessionsLog();
     }
 
     public int GetSessions()
@@ -33,10 +26,70 @@ public class UsageCounter
         sessions++;
     }
 
-    public void SaveSessions()
+    public void LoadSessionsLog()
     {
-        // since we are simply incrementing the number of sessions,
-        // we can set the incremented session here into the log file
-        // later.
+        Console.WriteLine(path);
+        // check if the file even exists 
+        // where it is supposed to be (root where sln is)
+        if (File.Exists(path))
+        {
+            // try reading the file, try parsing it to int, exists = true
+            try
+            {
+                content = File.ReadAllText(path);
+                if (string.IsNullOrEmpty(content))
+                {
+                    sessions = 0;
+                }
+                else
+                {
+                    sessions = int.Parse(content);
+
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error in UsageCounter.LoadSessionsLog:\nSomething went wrong accessing/reading the file: " + e.Message);
+                System.Console.WriteLine("Do you want to still continue? Sessions might not be logged");
+                System.Console.WriteLine("Enter [Y/y] to continue or [N/n] to exit:");
+                while (true)
+                {
+                    // coalescence into an empty string, 
+                    // for an example if the process is aborted midway
+                    string? prompt = Console.ReadLine()?.ToLower() ?? string.Empty;
+
+                    if (prompt.Equals("n"))
+                    {
+                        System.Console.WriteLine("Exiting...");
+                        Environment.Exit(0);
+                    }
+                    else if (prompt.Equals("y"))
+                    {
+                        System.Console.WriteLine("Continuing erroneous program");
+                        break;
+                    }
+                    System.Console.WriteLine("Enter [Y/y] to continue or [N/n] to exit:");
+                }
+            }
+        }
+        // File doesn't exist where we wanted to find it. 
+        // So we create it. Remember path is also containing where the file is:
+        else
+        {
+            File.CreateText(path);
+            sessions = 0;
+        }
+    }
+    public void SaveSessionsLog()
+    {
+        //attempt saving:
+        try
+        {
+            File.WriteAllTextAsync(path, sessions.ToString());
+        }
+        catch (Exception e)
+        {
+            System.Console.WriteLine("Error in UsageCounter.SaveSessionsLog: " + e.Message);
+        }
     }
 }

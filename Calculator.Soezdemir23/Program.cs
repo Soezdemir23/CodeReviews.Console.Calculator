@@ -11,10 +11,11 @@ namespace CalculatorProgram
         {
 
             bool endApp = false;
+            UsageCounter counter = new();
             // Display title as the C# console calculator app.
             Console.WriteLine("Console Calculator in C#\r");
             Console.WriteLine("------------------------\n");
-            Console.WriteLine(Directory.GetCurrentDirectory());
+            Console.WriteLine($"Session number: {counter.GetSessions()}");
 
             Calculator calculator = new Calculator();
             while (!endApp)
@@ -86,6 +87,8 @@ namespace CalculatorProgram
 
                 Console.WriteLine("\n"); // Friendly linespacing.
             }
+            counter.IncrementSessions();
+            counter.SaveSessionsLog();
             calculator.FinishLogging();
             return;
         }
