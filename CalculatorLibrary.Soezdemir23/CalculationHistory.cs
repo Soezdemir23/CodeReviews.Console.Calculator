@@ -1,4 +1,3 @@
-using CalculationEntry;
 namespace CalculatorLibrary;
 
 public class CalculationHistory
@@ -42,15 +41,33 @@ public class CalculationHistory
     public void SaveHistory()
     {
 
+        List<string> historyConverted = new();
+        foreach (var entry in history)
+        {
+            string row =
+                $"{entry.getOperation()},{entry.getFirstNum()},{entry.getSecondNum()},{entry.getResult()},{entry.getDate()}";
+            historyConverted.Add(row);
+            File.WriteAllLines(path, historyConverted);
+        }
     }
 
-    public void AddEntry()
+    public void AddEntry(CalculationEntry entry)
     {
-
+        history.Add(new CalculationEntry(
+            operation: entry.getOperation(),
+            firstNum: entry.getFirstNum(),
+            secondNum: entry.getSecondNum(),
+            result: entry.getResult(),
+            date: entry.getDate()
+        ));
     }
 
-    public void ClearHistory();
+    public void ClearHistory()
+    {
+        File.CreateText(path);
+        history.Clear();
+    }
 
-    public List<CalculationHistory> GetAllEntries() => history;
+    public List<CalculationEntry> GetAllEntries() => history;
 
 }
