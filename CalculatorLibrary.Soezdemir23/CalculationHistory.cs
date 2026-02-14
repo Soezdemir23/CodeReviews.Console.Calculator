@@ -2,8 +2,13 @@ namespace CalculatorLibrary;
 
 public class CalculationHistory
 {
-    List<CalculationEntry> history;
+    List<CalculationEntry> history = new();
     string path = Directory.GetCurrentDirectory() + "/calculationHistory.log";
+
+    public CalculationHistory()
+    {
+        LoadHistory();
+    }
     public void LoadHistory()
     {
         try
@@ -53,13 +58,7 @@ public class CalculationHistory
 
     public void AddEntry(CalculationEntry entry)
     {
-        history.Add(new CalculationEntry(
-            operation: entry.getOperation(),
-            firstNum: entry.getFirstNum(),
-            secondNum: entry.getSecondNum(),
-            result: entry.getResult(),
-            date: entry.getDate()
-        ));
+        history.Add(entry);
     }
 
     public void ClearHistory()

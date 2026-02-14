@@ -90,6 +90,7 @@ public class UsageCounter
         catch (Exception e)
         {
             System.Console.WriteLine("Error in UsageCounter.SaveSessionsLog: " + e.Message);
+            System.Console.WriteLine($"Exception at: {e.Message}");
         }
     }
 }

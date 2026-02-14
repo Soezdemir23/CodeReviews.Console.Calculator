@@ -12,10 +12,11 @@ namespace CalculatorProgram
 
             bool endApp = false;
             UsageCounter counter = new();
+            CalculationHistory history = new();
             // Display title as the C# console calculator app.
             Console.WriteLine("Console Calculator in C#\r");
-            Console.WriteLine("------------------------\n");
             Console.WriteLine($"Session number: {counter.GetSessions()}");
+            Console.WriteLine("------------------------\n");
 
             Calculator calculator = new Calculator();
             while (!endApp)
@@ -54,12 +55,13 @@ namespace CalculatorProgram
                 Console.WriteLine("\ts - Subtract");
                 Console.WriteLine("\tm - Multiply");
                 Console.WriteLine("\td - Divide");
+                Console.WriteLine($"\th - History [Entries: {history.GetAllEntries().Count}]");
                 Console.Write("Your option? ");
 
                 string? op = Console.ReadLine();
 
                 // Validate input is not null, and matches the pattern
-                if (op == null || !Regex.IsMatch(op, "[a|s|m|d]"))
+                if (op == null || !Regex.IsMatch(op, "[a|s|m|d|h]"))
                 {
                     Console.WriteLine("Error: Unrecognized input.");
                 }
@@ -67,16 +69,78 @@ namespace CalculatorProgram
                 {
                     try
                     {
+                        if (Regex.IsMatch(op, "[h]"))
+                        {
+                            var currentHistory = history.GetAllEntries();
+                            Console.Clear();
+                            Console.WriteLine($"Entries: {currentHistory.Count}");
+                            System.Console.WriteLine("----------------------------------");
+                            foreach (var entry in currentHistory)
+                            {
+                                System.Console.WriteLine($"{entry.getOperation()}, {entry.getFirstNum()}, {entry.getSecondNum()}, {entry.getResult()}, {entry.getDate()}");
+                            }
+                            System.Console.WriteLine("-----------------------------------");
+                            System.Console.WriteLine("Do you want to delete the history?");
+                            System.Console.WriteLine("\ty - Yes");
+                            System.Console.WriteLine("\tn - No");
+                            string? choice = Console.ReadLine()?.ToLower();
+                            if (choice == null || !Regex.IsMatch(choice, "[y|n]"))
+                            {
+                                System.Console.WriteLine("Error: Unrecognized input");
+                            }
+                            else if (choice.Equals("y"))
+                            {
+                                history.ClearHistory();
+                                System.Console.WriteLine("History deleted");
+                            }
+                            else
+                            {
+                                System.Console.WriteLine("History have not been deleted");
+                            }
+                        }
                         result = calculator.DoOperation(cleanNum1, cleanNum2, op);
                         if (double.IsNaN(result))
                         {
                             Console.WriteLine("This operation will result in a mathematical error.\n");
                         }
-                        else Console.WriteLine("Your result: {0:0.##}\n", result);
+                        else
+                        {
+                            Console.WriteLine("Your result: {0:0.##}\n", result);
+                            string operation = String.Empty;
+
+                            switch (op)
+                            {
+                                case "a":
+                                    operation = "Add";
+                                    break;
+                                case "s":
+                                    operation = "Substraction";
+                                    break;
+                                case "m":
+                                    operation = "Multiplication";
+                                    break;
+                                case "d":
+                                    operation = "Division";
+                                    break;
+
+                                default:
+                                    System.Console.WriteLine("Error in Program.cs trying to create entry (line 106)");
+                                    break;
+                            }
+                            var newEntry = new CalculationEntry(
+                                operation,
+                                cleanNum1,
+                                cleanNum2,
+                                result,
+                                DateTime.UtcNow
+                            );
+                            history.AddEntry(newEntry);
+                        }
                     }
                     catch (Exception e)
                     {
                         Console.WriteLine("Oh no! An exception occurred trying to do the math.\n - Details: " + e.Message);
+                        System.Console.WriteLine($"This is the stacktrace: {e.Message}");
                     }
                 }
                 Console.WriteLine("------------------------\n");
@@ -89,6 +153,7 @@ namespace CalculatorProgram
             }
             counter.IncrementSessions();
             counter.SaveSessionsLog();
+            history.SaveHistory();
             calculator.FinishLogging();
             return;
         }

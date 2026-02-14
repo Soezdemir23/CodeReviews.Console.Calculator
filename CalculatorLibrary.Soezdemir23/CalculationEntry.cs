@@ -14,6 +14,10 @@ public class CalculationEntry
         double secondNum, double result, DateTime date)
     {
         this.operation = operation;
+        this.firstNum = firstNum;
+        this.secondNum = secondNum;
+        this.result = result;
+        this.date = date;
 
     }
 
