@@ -34,7 +34,9 @@ public class CalculationHistory
             }
             else
             {
-                File.CreateText(path);
+                // if file is not existing in path, create it,
+                // dispose the returned Streamwrite object
+                File.Create(path).Dispose();
             }
         }
         catch (System.Exception e)
@@ -63,7 +65,8 @@ public class CalculationHistory
 
     public void ClearHistory()
     {
-        File.CreateText(path);
+        // create a new file, close the stream immediately afterwards.
+        File.WriteAllText(path, string.Empty);
         history.Clear();
     }
 
