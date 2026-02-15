@@ -77,7 +77,7 @@ namespace CalculatorProgram
                             System.Console.WriteLine("----------------------------------");
                             foreach (var entry in currentHistory)
                             {
-                                System.Console.WriteLine($"{entry.getOperation()}, {entry.getFirstNum()}, {entry.getSecondNum()}, {entry.getResult()}, {entry.getDate()}");
+                                System.Console.WriteLine($"{entry.Operation}, {entry.FirstNum}, {entry.SecondNum}, {entry.Result}, {entry.Date}");
                             }
                             System.Console.WriteLine("-----------------------------------");
                             System.Console.WriteLine("Do you want to delete the history?");
