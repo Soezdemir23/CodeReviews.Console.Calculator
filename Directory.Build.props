@@ -1,0 +1,14 @@
+<Project>
+  <PropertyGroup>
+    <!-- Enable all analyzers across all projects -->
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    
+    <!-- Start with warnings (change to true later when code is clean) -->
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    
+    <!-- Remove unused usings automatically -->
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+</Project>
