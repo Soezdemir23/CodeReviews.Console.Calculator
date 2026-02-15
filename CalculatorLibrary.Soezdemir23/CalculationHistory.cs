@@ -2,8 +2,8 @@ namespace CalculatorLibrary;
 
 public class CalculationHistory
 {
-    List<CalculationEntry> history = new();
-    string path = Directory.GetCurrentDirectory() + "/calculationHistory.log";
+    readonly List<CalculationEntry> history = new();
+    readonly string path = Path.Combine(Directory.GetCurrentDirectory(), "calculationHistory.log");
 
     public CalculationHistory()
     {
@@ -50,10 +50,10 @@ public class CalculationHistory
         foreach (var entry in history)
         {
             string row =
-                $"{entry.getOperation()},{entry.getFirstNum()},{entry.getSecondNum()},{entry.getResult()},{entry.getDate()}";
+                $"{entry.Operation},{entry.FirstNum},{entry.SecondNum},{entry.Result},{entry.Date}";
             historyConverted.Add(row);
-            File.WriteAllLines(path, historyConverted);
         }
+        File.WriteAllLines(path, historyConverted);
     }
 
     public void AddEntry(CalculationEntry entry)
