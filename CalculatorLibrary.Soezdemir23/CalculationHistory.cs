@@ -63,6 +63,8 @@ public class CalculationHistory
         history.Add(entry);
     }
 
+    public CalculationEntry GetEntryByID(int i) => history.ElementAt(i);
+
     public void ClearHistory()
     {
         // create a new file, close the stream immediately afterwards.

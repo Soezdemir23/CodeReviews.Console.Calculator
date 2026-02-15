@@ -16,11 +16,39 @@ namespace CalculatorProgram
             // Display title as the C# console calculator app.
             Console.WriteLine("Console Calculator in C#\r");
             Console.WriteLine($"Session number: {counter.GetSessions()}");
+            Console.WriteLine("Press [H/h]istory to view the history of calculations. Any other key to continue");
+            Console.WriteLine($"Number of entries in history: {history.GetAllEntries().Count}");
             Console.WriteLine("------------------------\n");
 
+            string? callhistory = Console.ReadLine()?.ToLower();
+            if (callhistory != null && Regex.IsMatch(callhistory, "[h]"))
+            {
+                System.Console.WriteLine("History entries");
+                System.Console.WriteLine("\toperation\tfirstnum\tsecondNum\tresult\tdate");
+                foreach (var entry in history.GetAllEntries())
+                {
+                    System.Console.WriteLine($"{entry.Operation},{entry.FirstNum}, {entry.SecondNum}, {entry.Result}, {entry.Date}");
+                }
+                System.Console.WriteLine("Do you want to delete the history?");
+                System.Console.WriteLine("\ty - Yes");
+                System.Console.WriteLine("\tany other key - No");
+                string? choice = Console.ReadLine()?.ToLower();
+                if (choice != null && !Regex.IsMatch(choice, "[y]"))
+                {
+                    history.ClearHistory();
+                    System.Console.WriteLine("History has been deleted... press any key");
+                }
+                else
+                {
+                    System.Console.WriteLine("proceeding to calculation");
+                }
+                Console.ReadKey();
+            }
             Calculator calculator = new Calculator();
             while (!endApp)
             {
+                System.Console.WriteLine("");
+
                 // Declare variables and set to empty.
                 // Use Nullable types (with ?) to match type of System.Console.ReadLine
                 string? numInput1 = "";
@@ -154,8 +182,85 @@ namespace CalculatorProgram
             counter.IncrementSessions();
             counter.SaveSessionsLog();
             history.SaveHistory();
-            calculator.FinishLogging();
+            calculator.FinishLogging();// the user was already prompted in the mainbody to choose between a number and digit
             return;
+        }
+        public double OperationNumber(CalculationHistory history, bool first)
+        {
+            if (first)
+            {
+                System.Console.WriteLine("Type a number or H/h to choose an number from the history");
+            }
+            else
+            {
+                System.Console.WriteLine("Type another number or H/h to choose an number from the history");
+            }
+            // now proceed to process the users input
+
+
+            while (true)
+            {
+
+                double result = 0;
+                string? numberOrChoice = Console.ReadLine()?.ToLower();
+                if (
+                    !string.IsNullOrEmpty(numberOrChoice) &&
+                    (Regex.IsMatch(numberOrChoice, "[h]") ||
+                    Double.TryParse(numberOrChoice, out result))
+                    )
+                {
+
+
+                    if (numberOrChoice.Equals("h"))
+                    {
+                        var count = 0;
+                        System.Console.WriteLine("History entries");
+                        System.Console.WriteLine("\tid\toperation\tfirstnum\tsecondNum\tresult\tdate");
+                        foreach (var entry in history.GetAllEntries())
+                        {
+                            System.Console.WriteLine($"{count}, {entry.Operation},{entry.FirstNum}, {entry.SecondNum}, {entry.Result}, {entry.Date}");
+                        }
+
+                        while (true)
+                        {
+                            System.Console.WriteLine("Choose the result by its id or [E/e]xit back to type a number:");
+                            string? choice = Console.ReadLine();
+
+                            if (!string.IsNullOrEmpty(choice) && Regex.IsMatch(choice, "[e]"))
+                            {
+                                System.Console.WriteLine("Going back to previous menu");
+                                break;
+                            }
+                            else if (int.TryParse(choice, out int id))
+                            {
+                                if (id > 0 && id < history.GetAllEntries().Count)
+                                {
+                                    return history.GetEntryByID(id).Result;
+                                }
+                                else
+                                {
+                                    System.Console.WriteLine("Please enter an id that's within the history list or exit the submenu");
+                                }
+                            }
+                            else
+                            {
+                                System.Console.WriteLine("Please enter an id that's within the history list or exit the submenu");
+
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        return result;
+                    }
+                }
+                else
+                {
+                    System.Console.WriteLine("Incorrect value. Please enter a number or choose [H/h]istory to assign a value from past results");
+                }
+            }
         }
     }
 }
+
