@@ -51,6 +51,9 @@ public class Calculator
                 }
                 writer.WriteValue("Divide");
                 break;
+            case "h":
+                writer.WriteValue("History");
+                break;
             // Return text for an incorrect option entry.
             default:
                 break;

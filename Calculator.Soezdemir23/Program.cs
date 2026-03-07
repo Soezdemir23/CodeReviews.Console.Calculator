@@ -16,66 +16,50 @@ namespace CalculatorProgram
             // Display title as the C# console calculator app.
             Console.WriteLine("Console Calculator in C#\r");
             Console.WriteLine($"Session number: {counter.GetSessions()}");
-            Console.WriteLine("Press [H/h]istory to view the history of calculations. Any other key to continue");
             Console.WriteLine($"Number of entries in history: {history.GetAllEntries().Count}");
+            Console.WriteLine("Press [H/h]istory to view the history of calculations. Any other key to continue");
             Console.WriteLine("------------------------\n");
 
             string? callhistory = Console.ReadLine()?.ToLower();
             if (callhistory != null && Regex.IsMatch(callhistory, "[h]"))
             {
-                System.Console.WriteLine("History entries");
-                System.Console.WriteLine("\toperation\tfirstnum\tsecondNum\tresult\tdate");
+                Console.WriteLine("\n----------- Calculation History ----------");
+                Console.WriteLine($"{"Operation",-15} {"First Number",-15} {"Second Number",-15} {"Result",-15} {"Date",-15}");
+                System.Console.WriteLine(new string('-', 85));
                 foreach (var entry in history.GetAllEntries())
                 {
-                    System.Console.WriteLine($"{entry.Operation},{entry.FirstNum}, {entry.SecondNum}, {entry.Result}, {entry.Date}");
+                    Console.WriteLine($"{entry.Operation,-15} {entry.FirstNum,-15:F4} {entry.SecondNum,-15:F4} {entry.Result,-15:F4} {entry.Date,-20}");
                 }
-                System.Console.WriteLine("Do you want to delete the history?");
-                System.Console.WriteLine("\ty - Yes");
-                System.Console.WriteLine("\tany other key - No");
+                Console.WriteLine("Do you want to delete the history?");
+                Console.WriteLine("\ty - Yes");
+                Console.WriteLine("\tany other key - No");
                 string? choice = Console.ReadLine()?.ToLower();
-                if (choice != null && !Regex.IsMatch(choice, "[y]"))
+                if (choice != null && Regex.IsMatch(choice, "[y]"))
                 {
                     history.ClearHistory();
-                    System.Console.WriteLine("History has been deleted... press any key");
+                    Console.WriteLine("History has been deleted... press any key to proceed to calculation");
+                }
+                else if (choice != null && Regex.IsMatch(choice, "[n]"))
+                {
+                    Console.WriteLine("proceeding to calculation... press any key");
                 }
                 else
                 {
-                    System.Console.WriteLine("proceeding to calculation");
+                    System.Console.WriteLine("entered different command, proceeding to the calculator");
                 }
                 Console.ReadKey();
             }
+
             Calculator calculator = new Calculator();
             while (!endApp)
             {
-                System.Console.WriteLine("");
+                Console.WriteLine("");
 
                 // Declare variables and set to empty.
                 // Use Nullable types (with ?) to match type of System.Console.ReadLine
-                string? numInput1 = "";
-                string? numInput2 = "";
                 double result = 0;
-
-                // Ask the user to type the first number.
-                Console.Write("Type a number, and then press Enter: ");
-                numInput1 = Console.ReadLine();
-
-                double cleanNum1 = 0;
-                while (!double.TryParse(numInput1, out cleanNum1))
-                {
-                    Console.Write("This is not valid input. Please enter an integer value: ");
-                    numInput1 = Console.ReadLine();
-                }
-
-                // Ask the user to type the second number.
-                Console.Write("Type another number, and then press Enter: ");
-                numInput2 = Console.ReadLine();
-
-                double cleanNum2 = 0;
-                while (!double.TryParse(numInput2, out cleanNum2))
-                {
-                    Console.Write("This is not valid input. Please enter an integer value: ");
-                    numInput2 = Console.ReadLine();
-                }
+                double cleanNum1 = OperationNumber(history, true);
+                double cleanNum2 = OperationNumber(history, false);
 
                 // Ask the user to choose an operator.
                 Console.WriteLine("Choose an operator from the following list:");
@@ -102,28 +86,30 @@ namespace CalculatorProgram
                             var currentHistory = history.GetAllEntries();
                             Console.Clear();
                             Console.WriteLine($"Entries: {currentHistory.Count}");
-                            System.Console.WriteLine("----------------------------------");
-                            foreach (var entry in currentHistory)
+                            Console.WriteLine("----------------------------------");
+                            Console.WriteLine("\n----------- Calcluation History ----------");
+                            Console.WriteLine($"{"Operation",-15} {"First Number",-15} {"Second Number",-15} {"Result",-15} {"Date",-15}");
+                            System.Console.WriteLine(new string('-', 85));
+                            foreach (var entry in history.GetAllEntries())
                             {
-                                System.Console.WriteLine($"{entry.Operation}, {entry.FirstNum}, {entry.SecondNum}, {entry.Result}, {entry.Date}");
+                                Console.WriteLine($"{entry.Operation,-15} {entry.FirstNum,-15:F4} {entry.SecondNum,-15:F4} {entry.Result,-15:F4} {entry.Date,-20}");
                             }
-                            System.Console.WriteLine("-----------------------------------");
-                            System.Console.WriteLine("Do you want to delete the history?");
-                            System.Console.WriteLine("\ty - Yes");
-                            System.Console.WriteLine("\tn - No");
+                            Console.WriteLine("Do you want to delete the history?");
+                            Console.WriteLine("\ty - Yes");
+                            Console.WriteLine("\tn - No");
                             string? choice = Console.ReadLine()?.ToLower();
                             if (choice == null || !Regex.IsMatch(choice, "[y|n]"))
                             {
-                                System.Console.WriteLine("Error: Unrecognized input");
+                                Console.WriteLine("Error: Unrecognized input");
                             }
                             else if (choice.Equals("y"))
                             {
                                 history.ClearHistory();
-                                System.Console.WriteLine("History deleted");
+                                Console.WriteLine("History deleted");
                             }
                             else
                             {
-                                System.Console.WriteLine("History have not been deleted");
+                                Console.WriteLine("History has not been deleted");
                             }
                         }
                         result = calculator.DoOperation(cleanNum1, cleanNum2, op);
@@ -152,7 +138,7 @@ namespace CalculatorProgram
                                     break;
 
                                 default:
-                                    System.Console.WriteLine("Error in Program.cs trying to create entry (line 106)");
+                                    Console.WriteLine("Error in Program.cs trying to create entry (line 106)");
                                     break;
                             }
                             var newEntry = new CalculationEntry(
@@ -168,7 +154,7 @@ namespace CalculatorProgram
                     catch (Exception e)
                     {
                         Console.WriteLine("Oh no! An exception occurred trying to do the math.\n - Details: " + e.Message);
-                        System.Console.WriteLine($"This is the stacktrace: {e.Message}");
+                        Console.WriteLine($"This is the stacktrace: {e.Message}");
                     }
                 }
                 Console.WriteLine("------------------------\n");
@@ -185,15 +171,15 @@ namespace CalculatorProgram
             calculator.FinishLogging();// the user was already prompted in the mainbody to choose between a number and digit
             return;
         }
-        public double OperationNumber(CalculationHistory history, bool first)
+        public static double OperationNumber(CalculationHistory history, bool first)
         {
             if (first)
             {
-                System.Console.WriteLine("Type a number or H/h to choose an number from the history");
+                Console.WriteLine("Type a number or H/h to choose an number from the history");
             }
             else
             {
-                System.Console.WriteLine("Type another number or H/h to choose an number from the history");
+                Console.WriteLine("Type another number or H/h to choose an number from the history");
             }
             // now proceed to process the users input
 
@@ -214,37 +200,46 @@ namespace CalculatorProgram
                     if (numberOrChoice.Equals("h"))
                     {
                         var count = 0;
-                        System.Console.WriteLine("History entries");
-                        System.Console.WriteLine("\tid\toperation\tfirstnum\tsecondNum\tresult\tdate");
+                        Console.WriteLine("\n----------- Calculation History ----------");
+                        Console.WriteLine($"{"ID",3} {"Operation",-15} {"First Num",-15} {"Second Num",-15} {"Result",-15} {"Date",-15}");
                         foreach (var entry in history.GetAllEntries())
                         {
-                            System.Console.WriteLine($"{count}, {entry.Operation},{entry.FirstNum}, {entry.SecondNum}, {entry.Result}, {entry.Date}");
+                            Console.WriteLine($"{count,3} {entry.Operation,-15} {entry.FirstNum,-15:F4} {entry.SecondNum,-15:F4} {entry.Result,-15:F4} {entry.Date,-15}");
+                            count++;
                         }
 
                         while (true)
                         {
-                            System.Console.WriteLine("Choose the result by its id or [E/e]xit back to type a number:");
+                            Console.WriteLine("Choose the result by its id or [E/e]xit back to type a number:");
                             string? choice = Console.ReadLine();
 
                             if (!string.IsNullOrEmpty(choice) && Regex.IsMatch(choice, "[e]"))
                             {
-                                System.Console.WriteLine("Going back to previous menu");
+                                Console.WriteLine("Going back to previous menu");
+                                if (first)
+                                {
+                                    Console.WriteLine("Type a number or H/h to choose an number from the history");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Type another number or H/h to choose an number from the history");
+                                }
                                 break;
                             }
                             else if (int.TryParse(choice, out int id))
                             {
-                                if (id > 0 && id < history.GetAllEntries().Count)
+                                if (id >= 0 && id < history.GetAllEntries().Count)
                                 {
                                     return history.GetEntryByID(id).Result;
                                 }
                                 else
                                 {
-                                    System.Console.WriteLine("Please enter an id that's within the history list or exit the submenu");
+                                    Console.WriteLine("Please enter an id that's within the history list or exit the submenu");
                                 }
                             }
                             else
                             {
-                                System.Console.WriteLine("Please enter an id that's within the history list or exit the submenu");
+                                Console.WriteLine("Please enter an id that's within the history list or exit the submenu");
 
                             }
 
@@ -257,7 +252,7 @@ namespace CalculatorProgram
                 }
                 else
                 {
-                    System.Console.WriteLine("Incorrect value. Please enter a number or choose [H/h]istory to assign a value from past results");
+                    Console.WriteLine("Incorrect value. Please enter a number or choose [H/h]istory to assign a value from past results");
                 }
             }
         }
