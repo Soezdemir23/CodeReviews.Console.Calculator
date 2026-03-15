@@ -1,6 +1,7 @@
 ﻿// Program.cs
 using System.Text.RegularExpressions;
 using CalculatorLibrary;
+using Microsoft.VisualBasic;
 
 namespace CalculatorProgram
 {
@@ -51,8 +52,12 @@ namespace CalculatorProgram
             }
 
             Calculator calculator = new Calculator();
+            bool skipSessionCount = false;
+
             while (!endApp)
             {
+                // TODO: remove this variable if it has no place in solving the issue:
+                // choosing the json
                 Console.WriteLine("");
 
                 // Declare variables and set to empty.
@@ -73,7 +78,7 @@ namespace CalculatorProgram
                 string? op = Console.ReadLine();
 
                 // Validate input is not null, and matches the pattern
-                if (op == null || !Regex.IsMatch(op, "[a|s|m|d|h]"))
+                if (op == null || !Regex.IsMatch(op, "[asmdh]"))
                 {
                     Console.WriteLine("Error: Unrecognized input.");
                 }
@@ -98,7 +103,7 @@ namespace CalculatorProgram
                             Console.WriteLine("\ty - Yes");
                             Console.WriteLine("\tn - No");
                             string? choice = Console.ReadLine()?.ToLower();
-                            if (choice == null || !Regex.IsMatch(choice, "[y|n]"))
+                            if (choice == null || !Regex.IsMatch(choice, "[yn]"))
                             {
                                 Console.WriteLine("Error: Unrecognized input");
                             }
@@ -112,8 +117,25 @@ namespace CalculatorProgram
                                 Console.WriteLine("History has not been deleted");
                             }
                         }
+
+                        // BUG: there is a bug caused after the following behavior:
+                        // - user is prompted two numbers or choose from a history of entries
+                        // - user is then choosing history of entries instead of an operation
+                        // - the result is NaN due to op being "h", not the result ending up as NaN if you catch my drift.
+                        // 
+                        // So what do I need to think of? Check if the op is h, before checking if the result is nan.
+                        // If op = "h", then the user should be dropped back to the menu to choose another operation.
+                        // seems to be fixed for now.
+
                         result = calculator.DoOperation(cleanNum1, cleanNum2, op);
-                        if (double.IsNaN(result))
+                        if (Regex.IsMatch(op, "[h]"))
+                        {
+                            // what should be done here? return back to the choose an operation or start back from the beginning?
+                            // what do I do with the lines 183 to 187? I don't know how this should be done
+                            System.Console.WriteLine("Skipping operation calling due to operation being called is history listing");
+                            skipSessionCount = true;
+                        }
+                        else if (double.IsNaN(result))
                         {
                             Console.WriteLine("This operation will result in a mathematical error.\n");
                         }
@@ -154,7 +176,7 @@ namespace CalculatorProgram
                     catch (Exception e)
                     {
                         Console.WriteLine("Oh no! An exception occurred trying to do the math.\n - Details: " + e.Message);
-                        Console.WriteLine($"This is the stacktrace: {e.Message}");
+                        Console.WriteLine($"This is the stacktrace: {e.StackTrace}");
                     }
                 }
                 Console.WriteLine("------------------------\n");

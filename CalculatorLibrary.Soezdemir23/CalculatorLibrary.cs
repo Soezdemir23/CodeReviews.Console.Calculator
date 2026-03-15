@@ -1,4 +1,5 @@
 ﻿// CalculatorLibrary.cs
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 
 namespace CalculatorLibrary;
@@ -52,14 +53,17 @@ public class Calculator
                 writer.WriteValue("Divide");
                 break;
             case "h":
-                writer.WriteValue("History");
+                writer.WriteValue("History called, result would be NaN");
                 break;
             // Return text for an incorrect option entry.
             default:
                 break;
         }
         writer.WritePropertyName("Result");
-        writer.WriteValue(result);
+        if (!Regex.IsMatch(op, "[h]"))
+        {
+            writer.WriteValue(result);
+        }
         writer.WriteEndObject();
 
 
