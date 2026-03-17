@@ -67,18 +67,27 @@ namespace CalculatorProgram
                 double cleanNum2 = OperationNumber(history, false);
 
                 // Ask the user to choose an operator.
+                // TODO: - [x] sqrt
+                //       - [x] Taking the power
+                //       - [x] 10x
+                //       - [ ] Trigonometry functions.
                 Console.WriteLine("Choose an operator from the following list:");
                 Console.WriteLine("\ta - Add");
                 Console.WriteLine("\ts - Subtract");
                 Console.WriteLine("\tm - Multiply");
                 Console.WriteLine("\td - Divide");
+                Console.WriteLine($"\tr - Square root of {cleanNum1}");
+                System.Console.WriteLine("\tp - Power function");
+                System.Console.WriteLine("\tx - Power of 10");
+
+
                 Console.WriteLine($"\th - History [Entries: {history.GetAllEntries().Count}]");
                 Console.Write("Your option? ");
 
                 string? op = Console.ReadLine();
 
                 // Validate input is not null, and matches the pattern
-                if (op == null || !Regex.IsMatch(op, "[asmdh]"))
+                if (op == null || !Regex.IsMatch(op, "[asmdhrpx]"))
                 {
                     Console.WriteLine("Error: Unrecognized input.");
                 }
@@ -118,20 +127,9 @@ namespace CalculatorProgram
                             }
                         }
 
-                        // BUG: there is a bug caused after the following behavior:
-                        // - user is prompted two numbers or choose from a history of entries
-                        // - user is then choosing history of entries instead of an operation
-                        // - the result is NaN due to op being "h", not the result ending up as NaN if you catch my drift.
-                        // 
-                        // So what do I need to think of? Check if the op is h, before checking if the result is nan.
-                        // If op = "h", then the user should be dropped back to the menu to choose another operation.
-                        // seems to be fixed for now.
-
                         result = calculator.DoOperation(cleanNum1, cleanNum2, op);
                         if (Regex.IsMatch(op, "[h]"))
                         {
-                            // what should be done here? return back to the choose an operation or start back from the beginning?
-                            // what do I do with the lines 183 to 187? I don't know how this should be done
                             System.Console.WriteLine("Skipping operation calling due to operation being called is history listing");
                             skipSessionCount = true;
                         }
@@ -158,7 +156,15 @@ namespace CalculatorProgram
                                 case "d":
                                     operation = "Division";
                                     break;
-
+                                case "r":
+                                    operation = "Square root";
+                                    break;
+                                case "p":
+                                    operation = "Taking power";
+                                    break;
+                                case "x":
+                                    operation = "Power of 10";
+                                    break;
                                 default:
                                     Console.WriteLine("Error in Program.cs trying to create entry (line 106)");
                                     break;

@@ -55,6 +55,18 @@ public class Calculator
             case "h":
                 writer.WriteValue("History called, result would be NaN");
                 break;
+            case "r":
+                result = Math.Sqrt(num1);
+                writer.WriteValue("Square root of first Number");
+                break;
+            case "p":
+                result = Math.Pow(num1, num2);
+                writer.WriteValue("Power function");
+                break;
+            case "x":
+                result = Math.Pow(10, num1);
+                writer.WriteValue("Power of Ten");
+                break;
             // Return text for an incorrect option entry.
             default:
                 break;
