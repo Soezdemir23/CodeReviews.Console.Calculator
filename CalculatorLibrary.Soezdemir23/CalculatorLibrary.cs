@@ -52,9 +52,9 @@ public class Calculator
                 }
                 writer.WriteValue("Divide");
                 break;
-            case "h":
-                writer.WriteValue("History called, result would be NaN");
-                break;
+            //case "h":
+            //    writer.WriteValue("History called, result would be NaN");
+            //    break;
             case "r":
                 result = Math.Sqrt(num1);
                 writer.WriteValue("Square root of first Number");
