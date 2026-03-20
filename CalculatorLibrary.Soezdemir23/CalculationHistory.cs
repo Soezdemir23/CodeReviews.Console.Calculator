@@ -41,7 +41,7 @@ public class CalculationHistory
         }
         catch (System.Exception e)
         {
-            System.Console.WriteLine("Error in CalculationHistory.LoadHistory:\n" + e.Message);
+            Console.WriteLine("Error in CalculationHistory.LoadHistory:\n" + e.Message);
         }
     }
 
