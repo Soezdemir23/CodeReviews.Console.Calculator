@@ -1,7 +1,6 @@
 ﻿// Program.cs
 using System.Text.RegularExpressions;
 using CalculatorLibrary;
-using Microsoft.VisualBasic;
 
 namespace CalculatorProgram
 {
@@ -26,7 +25,7 @@ namespace CalculatorProgram
             {
                 Console.WriteLine("\n----------- Calculation History ----------");
                 Console.WriteLine($"{"Operation",-15} {"First Number",-15} {"Second Number",-15} {"Result",-15} {"Date",-15}");
-                System.Console.WriteLine(new string('-', 85));
+                Console.WriteLine(new string('-', 85));
                 foreach (var entry in history.GetAllEntries())
                 {
                     Console.WriteLine($"{entry.Operation,-15} {entry.FirstNum,-15:F4} {entry.SecondNum,-15:F4} {entry.Result,-15:F4} {entry.Date,-20}");
@@ -46,13 +45,13 @@ namespace CalculatorProgram
                 }
                 else
                 {
-                    System.Console.WriteLine("entered different command, proceeding to the calculator");
+                    Console.WriteLine("entered different command, proceeding to the calculator");
                 }
                 Console.ReadKey();
             }
 
             Calculator calculator = new Calculator();
-            bool skipSessionCount = false;
+
 
             while (!endApp)
             {
@@ -77,8 +76,8 @@ namespace CalculatorProgram
                 Console.WriteLine("\tm - Multiply");
                 Console.WriteLine("\td - Divide");
                 Console.WriteLine($"\tr - Square root of {cleanNum1}");
-                System.Console.WriteLine("\tp - Power function");
-                System.Console.WriteLine("\tx - Power of 10");
+                Console.WriteLine("\tp - Power function");
+                Console.WriteLine("\tx - Power of 10");
 
 
                 Console.WriteLine($"\th - History [Entries: {history.GetAllEntries().Count}]");
@@ -101,9 +100,9 @@ namespace CalculatorProgram
                             Console.Clear();
                             Console.WriteLine($"Entries: {currentHistory.Count}");
                             Console.WriteLine("----------------------------------");
-                            Console.WriteLine("\n----------- Calcluation History ----------");
+                            Console.WriteLine("\n----------- Calculation History ----------");
                             Console.WriteLine($"{"Operation",-15} {"First Number",-15} {"Second Number",-15} {"Result",-15} {"Date",-15}");
-                            System.Console.WriteLine(new string('-', 85));
+                            Console.WriteLine(new string('-', 85));
                             foreach (var entry in history.GetAllEntries())
                             {
                                 Console.WriteLine($"{entry.Operation,-15} {entry.FirstNum,-15:F4} {entry.SecondNum,-15:F4} {entry.Result,-15:F4} {entry.Date,-20}");
@@ -127,57 +126,60 @@ namespace CalculatorProgram
                             }
                         }
 
-                        result = calculator.DoOperation(cleanNum1, cleanNum2, op);
-                        if (Regex.IsMatch(op, "[h]"))
-                        {
-                            System.Console.WriteLine("Skipping operation calling due to operation being called is history listing");
-                            skipSessionCount = true;
-                        }
-                        else if (double.IsNaN(result))
-                        {
-                            Console.WriteLine("This operation will result in a mathematical error.\n");
-                        }
-                        else
-                        {
-                            Console.WriteLine("Your result: {0:0.##}\n", result);
-                            string operation = String.Empty;
 
-                            switch (op)
+                        // if operation is not h, then do the calculation
+                        if (!Regex.IsMatch(op, "[h]"))
+                        {
+                            result = calculator.DoOperation(cleanNum1, cleanNum2, op);
+                            // if the calculator returns a nan, there is a problem
+                            if (double.IsNaN(result))
                             {
-                                case "a":
-                                    operation = "Add";
-                                    break;
-                                case "s":
-                                    operation = "Substraction";
-                                    break;
-                                case "m":
-                                    operation = "Multiplication";
-                                    break;
-                                case "d":
-                                    operation = "Division";
-                                    break;
-                                case "r":
-                                    operation = "Square root";
-                                    break;
-                                case "p":
-                                    operation = "Taking power";
-                                    break;
-                                case "x":
-                                    operation = "Power of 10";
-                                    break;
-                                default:
-                                    Console.WriteLine("Error in Program.cs trying to create entry (line 106)");
-                                    break;
+                                Console.WriteLine("This operation will result in a mathematical error.\n");
                             }
-                            var newEntry = new CalculationEntry(
-                                operation,
-                                cleanNum1,
-                                cleanNum2,
-                                result,
-                                DateTime.UtcNow
-                            );
-                            history.AddEntry(newEntry);
+                            // otherwise write into the result and reset the operation.
+                            else
+                            {
+                                Console.WriteLine("Your result: {0:0.##}\n", result);
+                                string operation = String.Empty;
+
+                                switch (op)
+                                {
+                                    case "a":
+                                        operation = "Add";
+                                        break;
+                                    case "s":
+                                        operation = "Subtraction";
+                                        break;
+                                    case "m":
+                                        operation = "Multiplication";
+                                        break;
+                                    case "d":
+                                        operation = "Division";
+                                        break;
+                                    case "r":
+                                        operation = "Square root";
+                                        break;
+                                    case "p":
+                                        operation = "Taking power";
+                                        break;
+                                    case "x":
+                                        operation = "Power of 10";
+                                        break;
+                                    default:
+
+                                        break;
+                                }
+                                var newEntry = new CalculationEntry(
+                                    operation,
+                                    cleanNum1,
+                                    cleanNum2,
+                                    result,
+                                    DateTime.UtcNow
+                                );
+                                history.AddEntry(newEntry);
+                            }
                         }
+
                     }
                     catch (Exception e)
                     {
