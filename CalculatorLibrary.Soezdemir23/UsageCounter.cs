@@ -29,7 +29,7 @@ public class UsageCounter
 
     public void LoadSessionsLog()
     {
-        Console.WriteLine(path);
+
         // check if the file even exists 
         // where it is supposed to be (root where sln is)
         if (File.Exists(path))
@@ -51,8 +51,8 @@ public class UsageCounter
             catch (Exception e)
             {
                 Console.WriteLine("Error in UsageCounter.LoadSessionsLog:\nSomething went wrong accessing/reading the file: " + e.Message);
-                System.Console.WriteLine("Do you want to still continue? Sessions might not be logged");
-                System.Console.WriteLine("Enter [Y/y] to continue or [N/n] to exit:");
+                Console.WriteLine("Do you want to still continue? Sessions might not be logged");
+                Console.WriteLine("Enter [Y/y] to continue or [N/n] to exit:");
                 while (true)
                 {
                     // coalescence into an empty string, 
@@ -61,23 +61,21 @@ public class UsageCounter
 
                     if (prompt.Equals("n"))
                     {
-                        System.Console.WriteLine("Exiting...");
+                        Console.WriteLine("Exiting...");
                         Environment.Exit(0);
                     }
                     else if (prompt.Equals("y"))
                     {
-                        System.Console.WriteLine("Continuing erroneous program");
+                        Console.WriteLine("Continuing erroneous program");
                         break;
                     }
-                    System.Console.WriteLine("Enter [Y/y] to continue or [N/n] to exit:");
+                    Console.WriteLine("Enter [Y/y] to continue or [N/n] to exit:");
                 }
             }
         }
-        // File doesn't exist where we wanted to find it. 
-        // So we create it. Remember path is also containing where the file is:
         else
         {
-            File.CreateText(path);
+            File.WriteAllText(path, string.Empty);
             sessions = 0;
         }
     }
@@ -86,12 +84,12 @@ public class UsageCounter
         //attempt saving:
         try
         {
-            File.WriteAllTextAsync(path, sessions.ToString());
+            File.WriteAllText(path, sessions.ToString());
         }
         catch (Exception e)
         {
-            System.Console.WriteLine("Error in UsageCounter.SaveSessionsLog: " + e.Message);
-            System.Console.WriteLine($"Exception at: {e.Message}");
+            Console.WriteLine("Error in UsageCounter.SaveSessionsLog: " + e.Message);
+            Console.WriteLine($"Exception at: {e.Message}");
         }
     }
 }
