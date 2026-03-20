@@ -20,7 +20,7 @@ namespace CalculatorProgram
             Console.WriteLine("Press [H/h]istory to view the history of calculations. Any other key to continue");
             Console.WriteLine("------------------------\n");
 
-            string? callhistory = Console.ReadLine()?.ToLower();
+            string? callhistory = Console.ReadLine()?.ToLowerInvariant();
             if (callhistory != null && Regex.IsMatch(callhistory, "[h]"))
             {
                 Console.WriteLine("\n----------- Calculation History ----------");
@@ -33,7 +33,7 @@ namespace CalculatorProgram
                 Console.WriteLine("Do you want to delete the history?");
                 Console.WriteLine("\ty - Yes");
                 Console.WriteLine("\tany other key - No");
-                string? choice = Console.ReadLine()?.ToLower();
+                string? choice = Console.ReadLine()?.ToLowerInvariant();
                 if (choice != null && Regex.IsMatch(choice, "[y]"))
                 {
                     history.ClearHistory();
@@ -83,10 +83,10 @@ namespace CalculatorProgram
                 Console.WriteLine($"\th - History [Entries: {history.GetAllEntries().Count}]");
                 Console.Write("Your option? ");
 
-                string? op = Console.ReadLine();
+                string? op = Console.ReadLine()?.ToLowerInvariant();
 
                 // Validate input is not null, and matches the pattern
-                if (op == null || !Regex.IsMatch(op, "[asmdhrpx]"))
+                if (op is null || op is not ("a" or "s" or "m" or "d" or "h" or "r" or "p" or "x"))
                 {
                     Console.WriteLine("Error: Unrecognized input.");
                 }
@@ -110,8 +110,8 @@ namespace CalculatorProgram
                             Console.WriteLine("Do you want to delete the history?");
                             Console.WriteLine("\ty - Yes");
                             Console.WriteLine("\tn - No");
-                            string? choice = Console.ReadLine()?.ToLower();
-                            if (choice == null || !Regex.IsMatch(choice, "[yn]"))
+                            string? choice = Console.ReadLine()?.ToLowerInvariant();
+                            if (choice is null || choice is not ("y" or "n"))
                             {
                                 Console.WriteLine("Error: Unrecognized input");
                             }
@@ -128,7 +128,7 @@ namespace CalculatorProgram
 
 
                         // if operation is not h, then do the calculation
-                        if (!Regex.IsMatch(op, "[h]"))
+                        if (op is not "h")
                         {
                             result = calculator.DoOperation(cleanNum1, cleanNum2, op);
                             // if the calculator returns a nan, there is a problem
@@ -191,7 +191,7 @@ namespace CalculatorProgram
 
                 // Wait for the user to respond before closing.
                 Console.Write("Press 'n' and Enter to close the app, or press any other key and Enter to continue: ");
-                if (Console.ReadLine() == "n") endApp = true;
+                if (Console.ReadLine()?.ToLowerInvariant() == "n") endApp = true;
 
                 Console.WriteLine("\n"); // Friendly linespacing.
             }
@@ -218,7 +218,7 @@ namespace CalculatorProgram
             {
 
                 double result = 0;
-                string? numberOrChoice = Console.ReadLine()?.ToLower();
+                string? numberOrChoice = Console.ReadLine()?.ToLowerInvariant();
                 if (
                     !string.IsNullOrEmpty(numberOrChoice) &&
                     (Regex.IsMatch(numberOrChoice, "[h]") ||
@@ -241,7 +241,7 @@ namespace CalculatorProgram
                         while (true)
                         {
                             Console.WriteLine("Choose the result by its id or [E/e]xit back to type a number:");
-                            string? choice = Console.ReadLine();
+                            string? choice = Console.ReadLine()?.ToLowerInvariant();
 
                             if (!string.IsNullOrEmpty(choice) && Regex.IsMatch(choice, "[e]"))
                             {
