@@ -10,7 +10,9 @@ public class UsageCounter
     private int sessions;
     private string content = string.Empty;
     private readonly string path =
-    Path.Combine(Directory.GetCurrentDirectory(), "usagecounter.log");
+    Path.Combine(
+
+        Directory.GetCurrentDirectory(), "usagecounter.log");
 
     public UsageCounter()
     {
