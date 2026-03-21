@@ -8,7 +8,7 @@
     <!-- Start with warnings (change to true later when code is clean) -->
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     
-    <!-- Remove unused usings automatically -->
+    <!-- Enable implicit/global usings for common .Net namespaces -->
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 </Project>
