@@ -71,13 +71,13 @@ namespace CalculatorProgram
                 //       - [x] 10x
                 //       - [ ] Trigonometry functions.
                 Console.WriteLine("Choose an operator from the following list:");
-                Console.WriteLine("\ta - Add");
-                Console.WriteLine("\ts - Subtract");
-                Console.WriteLine("\tm - Multiply");
-                Console.WriteLine("\td - Divide");
+                Console.WriteLine($"\ta - Add | {cleanNum1} + {cleanNum2}");
+                Console.WriteLine($"\ts - Subtract | {cleanNum1} - {cleanNum2}");
+                Console.WriteLine($"\tm - Multiply | {cleanNum1} * {cleanNum2}");
+                Console.WriteLine($"\td - Divide | {cleanNum1} / {cleanNum2}");
                 Console.WriteLine($"\tr - Square root of {cleanNum1}");
-                Console.WriteLine("\tp - Power function");
-                Console.WriteLine("\tx - Power of 10");
+                Console.WriteLine($"\tp - Power function | {cleanNum1}^{cleanNum2}");
+                Console.WriteLine($"\tx - Power of 10 | {cleanNum1}^10");
 
 
                 Console.WriteLine($"\th - History [Entries: {history.GetAllEntries().Count}]");
