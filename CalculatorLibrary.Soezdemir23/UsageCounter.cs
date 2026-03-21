@@ -71,6 +71,9 @@ public class UsageCounter
                     }
                     Console.WriteLine("Enter [Y/y] to continue or [N/n] to exit:");
                 }
+                // This is a review recommendation from Github Copilot on surfacing errors instead of performing interactive 
+                // console I/O or terminating the process from within this library class (1 from 10)
+                throw new IOException("Error in UsageCounter.LoadSessionLog: Somethingh went wrong accessing/reading the usage counter file.", e);
             }
         }
         else
