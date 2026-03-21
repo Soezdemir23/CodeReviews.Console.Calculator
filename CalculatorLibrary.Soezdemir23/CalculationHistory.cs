@@ -23,6 +23,24 @@ public class CalculationHistory
                     foreach (var row in content)
                     {
                         string[] columns = row.Split(",");
+
+                        // validate column count
+                        if (columns.Length < 5)
+                        {
+                            Console.WriteLine($"Skipping malformed row: {row}");
+                            continue;
+                        }
+
+                        // Use InvariantCultur for doubles and explicit format for date
+                        if (!double.TryParse(columns[1], NumberStyles.Any, CultureInfo.InvariantCulture, out var firstNum) ||
+                            !double.TryParse(columns[2], NumberStyles.Any, CultureInfo.InvariantCulture, out var secondNum) ||
+                            !double.TryParse(columns[3], NumberStyles.Any, CultureInfo.InvariantCulture, out var result) ||
+                            !DateTime.TryParseExact(columns[4], "O", CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out var date))
+                        {
+                            Console.WriteLine($"Skipping row with parse error: {row}");
+                            continue;
+                        }
+
                         history.Add(new CalculationEntry(
                             columns[0],
                             double.Parse(columns[1]),
