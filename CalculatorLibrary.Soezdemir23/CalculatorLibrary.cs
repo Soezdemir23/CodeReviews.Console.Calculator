@@ -4,16 +4,20 @@ using Newtonsoft.Json;
 
 namespace CalculatorLibrary;
 
-public class Calculator
+public class Calculator : IDisposable
 {
     JsonWriter writer;
+    //recommendation from Copilot to properly dispose the JSON logging
+    private bool disposed;
 
     public Calculator()
     {
         StreamWriter logFile = File.CreateText("calculator.json");
         logFile.AutoFlush = true;
-        writer = new JsonTextWriter(logFile);
-        writer.Formatting = Formatting.Indented;
+        writer = new JsonTextWriter(logFile)
+        {
+            Formatting = Formatting.Indented
+        };
         writer.WriteStartObject();
         writer.WritePropertyName("Operations");
         writer.WriteStartArray();
@@ -21,6 +25,11 @@ public class Calculator
 
     public double DoOperation(double num1, double num2, string op)
     {
+        // if the file is not disposed, 
+        if (disposed)
+        {
+            throw new ObjectDisposedException(nameof(Calculator));
+        }
         double result = double.NaN; // Default value is "not-a-number" if an operation, such as division, could result in an error.
         writer.WriteStartObject();
         writer.WritePropertyName("Operand1");
@@ -52,9 +61,7 @@ public class Calculator
                 }
                 writer.WriteValue("Divide");
                 break;
-            //case "h":
-            //    writer.WriteValue("History called, result would be NaN");
-            //    break;
+
             case "r":
                 result = Math.Sqrt(num1);
                 writer.WriteValue("Square root of first Number");
@@ -71,20 +78,22 @@ public class Calculator
             default:
                 break;
         }
-        writer.WritePropertyName("Result");
-        if (!Regex.IsMatch(op, "[h]"))
-        {
-            writer.WriteValue(result);
-        }
         writer.WriteEndObject();
 
 
         return result;
     }
-    public void FinishLogging()
+    public void Dispose()
     {
+        if (disposed) return;
+
+        // Close JSON structure before disposing writer.
+        // review from copilot
         writer.WriteEndArray();
         writer.WriteEndObject();
         writer.Close();
+
+        disposed = true;
+        GC.SuppressFinalize(this);
     }
 }

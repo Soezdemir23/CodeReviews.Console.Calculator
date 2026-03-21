@@ -50,7 +50,7 @@ namespace CalculatorProgram
                 Console.ReadKey();
             }
 
-            Calculator calculator = new Calculator();
+            using var calculator = new Calculator();
 
 
             while (!endApp)
@@ -198,7 +198,7 @@ namespace CalculatorProgram
             counter.IncrementSessions();
             counter.SaveSessionsLog();
             history.SaveHistory();
-            calculator.FinishLogging();// the user was already prompted in the mainbody to choose between a number and digit
+            // Copilot Review for handling
             return;
         }
         public static double OperationNumber(CalculationHistory history, bool first)
