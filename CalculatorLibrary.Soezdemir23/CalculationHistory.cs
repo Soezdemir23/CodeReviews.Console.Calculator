@@ -95,6 +95,7 @@ public class CalculationHistory
         history.Clear();
     }
 
-    public List<CalculationEntry> GetAllEntries() => history;
+    public List<CalculationEntry> GetAllEntries()
+        => new List<CalculationEntry>(history);
 
 }
