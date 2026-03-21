@@ -77,7 +77,7 @@ namespace CalculatorProgram
                 Console.WriteLine($"\td - Divide | {cleanNum1} / {cleanNum2}");
                 Console.WriteLine($"\tr - Square root of {cleanNum1}");
                 Console.WriteLine($"\tp - Power function | {cleanNum1}^{cleanNum2}");
-                Console.WriteLine($"\tx - Power of 10 | {cleanNum1}^10");
+                Console.WriteLine($"\tx - Power of 10 | 10^{cleanNum1}");
 
 
                 Console.WriteLine($"\th - History [Entries: {history.GetAllEntries().Count}]");
