@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace CalculatorLibrary;
 
 public class CalculationHistory
@@ -51,8 +53,11 @@ public class CalculationHistory
         List<string> historyConverted = new();
         foreach (var entry in history)
         {
+            // Another copilot tip, for when this project is opened from another user whose computer has a different ui language:
+            // while the date is not comma separated on my machine, it can be comma separated on another machine
+            // therefore we have to use invariantculture for the entry.Date. And always be mindful of 'O' and '0'. Can cause exceptions
             string row =
-                $"{entry.Operation},{entry.FirstNum},{entry.SecondNum},{entry.Result},{entry.Date}";
+                $"{entry.Operation},{entry.FirstNum},{entry.SecondNum},{entry.Result},{entry.Date.ToString("O", CultureInfo.InvariantCulture)}";
             historyConverted.Add(row);
         }
         File.WriteAllLines(path, historyConverted);
